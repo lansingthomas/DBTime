@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, Platform, Text, TouchableOpacity } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -98,18 +98,7 @@ export default function Index() {
           Your Breath{"\n"}Your Power
         </Text>
 
-        <Image 
-          source={Platform.OS === 'web' 
-            ? { uri: '/DBTime/dogbird.jpg' } 
-            : require("@/assets/images/dogbird.jpg")
-          } 
-          style={{
-            width: 200,
-            height: 200,
-            marginBottom: 20,
-          }}
-          resizeMode="contain"
-        />
+
         
         <Text style={{
           fontSize: 18,
