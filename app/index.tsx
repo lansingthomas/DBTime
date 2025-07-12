@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity } from "react-native";
+import { Image, Platform, Text, TouchableOpacity } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -62,6 +62,7 @@ export default function Index() {
       <Stack.Screen 
         options={{ 
           title: "DBTime",
+          headerShown: Platform.OS !== 'web', // Hide header on web
           headerStyle: {
             backgroundColor: '#008B8B', // Teal from your gradient
           },
@@ -98,7 +99,10 @@ export default function Index() {
         </Text>
 
         <Image 
-          source={require("@/assets/images/dogbird.jpg")} 
+          source={Platform.OS === 'web' 
+            ? { uri: '/DBTime/dogbird.jpg' } 
+            : require("@/assets/images/dogbird.jpg")
+          } 
           style={{
             width: 200,
             height: 200,
