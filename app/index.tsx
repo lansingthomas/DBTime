@@ -1,7 +1,4 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { Stack } from "expo-router";
 import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -62,121 +59,118 @@ export default function Index() {
   };
 
   return (
-    <>
-      <Stack.Screen 
-        options={{ 
-          title: "DBTime",
-          headerShown: false, // Hide default header for web
-        }} 
-      />
-      <LinearGradient
-        colors={['#B85450', '#008B8B', '#CD853F']} // Rust, Teal, Sandy Brown
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 20,
-        }}
-      >
-        {/* Custom header */}
-        <View style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 60,
-          backgroundColor: '#008B8B',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000,
-          borderBottomWidth: 2,
-          borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #B85450, #008B8B, #CD853F)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '20px',
+        margin: 0,
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}
+    >
+      {/* Custom header */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '60px',
+        backgroundColor: '#008B8B',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottom: '2px solid rgba(255, 255, 255, 0.3)',
+      }}>
+        <h1 style={{
+          color: 'white',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          letterSpacing: '1px',
+          margin: 0,
         }}>
-          <Text style={{
-            color: 'white',
-            fontSize: 20,
-            fontWeight: 'bold',
-            letterSpacing: 1,
-          }}>
-            DBTime
-          </Text>
-        </View>
+          DBTime
+        </h1>
+      </div>
 
-        {/* Content container with top margin */}
-        <View style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: 60,
-        }}>
+      {/* Content container with top margin */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '60px',
+        textAlign: 'center',
+        maxWidth: '600px',
+        width: '100%',
+      }}>
 
-        <Text style={{
-          fontSize: 32,
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: 30,
-          color: "white",
-          textShadowColor: 'rgba(0, 0, 0, 0.3)',
-          textShadowOffset: {width: 1, height: 1},
-          textShadowRadius: 3,
+        <h2 style={{
+          fontSize: '32px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginBottom: '30px',
+          color: 'white',
+          textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)',
+          lineHeight: '1.2',
         }}>
-          Your Breath{"\n"}Your Power
-        </Text>
+          Your Breath<br />Your Power
+        </h2>
 
         {/* Emoji instead of image */}
-        <Text style={{
-          fontSize: 80,
-          marginBottom: 20,
-          textAlign: "center",
+        <div style={{
+          fontSize: '80px',
+          marginBottom: '20px',
+          textAlign: 'center',
         }}>
           🐕‍🦺
-        </Text>
+        </div>
         
-        <Text style={{
-          fontSize: 18,
-          textAlign: "center",
-          marginBottom: 30,
-          paddingHorizontal: 20,
-          color: "white",
+        <p style={{
+          fontSize: '18px',
+          textAlign: 'center',
+          marginBottom: '30px',
+          padding: '20px',
+          color: 'white',
           backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          padding: 15,
-          borderRadius: 10,
-          textShadowColor: 'rgba(0, 0, 0, 0.3)',
-          textShadowOffset: {width: 1, height: 1},
-          textShadowRadius: 2,
+          borderRadius: '10px',
+          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)',
+          lineHeight: '1.4',
+          margin: '0 0 30px 0',
         }}>
           {shuffledPhrases[currentIndex] || "Loading..."}
-        </Text>
+        </p>
 
-        <TouchableOpacity
-          onPress={nextPhrase}
+        <button
+          onClick={nextPhrase}
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-            paddingHorizontal: 30,
-            paddingVertical: 15,
-            borderRadius: 25,
-            borderWidth: 2,
-            borderColor: "white",
-            shadowColor: "#000",
-            shadowOffset: {width: 0, height: 2},
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            color: 'white',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            padding: '15px 30px',
+            borderRadius: '25px',
+            border: '2px solid white',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+            e.target.style.transform = 'translateY(-2px)';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            e.target.style.transform = 'translateY(0)';
           }}
         >
-          <Text style={{
-            color: "white",
-            fontSize: 16,
-            fontWeight: "bold",
-          }}>
-            Next Resource
-          </Text>
-        </TouchableOpacity>
+          Next Resource
+        </button>
         
-        </View>
-      </LinearGradient>
-    </>
+      </div>
+    </div>
   );
 }
