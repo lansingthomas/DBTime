@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity } from "react-native";
+import { Image, Platform, Text, TouchableOpacity } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -26,6 +26,7 @@ export default function Index() {
 
   const [shuffledPhrases, setShuffledPhrases] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
 
   // Shuffle array function
   const shuffleArray = (array) => {
@@ -63,7 +64,7 @@ export default function Index() {
         options={{ 
           title: "DBTime",
           headerStyle: {
-            backgroundColor: '#008B8B', // Teal from your gradient
+            backgroundColor: Platform.OS === 'web' ? '#008B8B' : '#008B8B',
           },
           headerTintColor: 'white',
           headerTitleStyle: {
@@ -97,15 +98,30 @@ export default function Index() {
           Your Breath{"\n"}Your Power
         </Text>
 
-        <Image 
-          source={require("@/assets/images/dogbird.jpg")} 
-          style={{
-            width: 200,
-            height: 200,
+        {/* Conditional image rendering with error handling */}
+        {!imageError && (
+          <Image 
+            source={require("@/assets/images/dogbird.jpg")} 
+            style={{
+              width: 200,
+              height: 200,
+              marginBottom: 20,
+            }}
+            resizeMode="contain"
+            onError={() => setImageError(true)}
+          />
+        )}
+        
+        {/* Fallback if image fails */}
+        {imageError && (
+          <Text style={{
+            fontSize: 60,
             marginBottom: 20,
-          }}
-          resizeMode="contain"
-        />
+            textAlign: "center",
+          }}>
+            🐕‍🦺
+          </Text>
+        )}
         
         <Text style={{
           fontSize: 18,
