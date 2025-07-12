@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Platform, Text, TouchableOpacity } from "react-native";
 
 export default function Index() {
@@ -24,9 +24,6 @@ export default function Index() {
     "List things ^^ (colors, sea creatures, favorite foods)"
   ];
 
-  const [shuffledPhrases, setShuffledPhrases] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
   // Shuffle array function
   const shuffleArray = (array) => {
     const shuffled = [...array];
@@ -37,12 +34,9 @@ export default function Index() {
     return shuffled;
   };
 
-  // Initialize with shuffled phrases and random start
-  useEffect(() => {
-    const shuffled = shuffleArray(basePhrases);
-    setShuffledPhrases(shuffled);
-    setCurrentIndex(Math.floor(Math.random() * shuffled.length));
-  }, []);
+  // Initialize with shuffled phrases immediately
+  const [shuffledPhrases, setShuffledPhrases] = useState(() => shuffleArray(basePhrases));
+  const [currentIndex, setCurrentIndex] = useState(() => Math.floor(Math.random() * basePhrases.length));
 
   const nextPhrase = () => {
     setCurrentIndex((prevIndex) => {
