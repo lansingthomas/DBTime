@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { LinearGradient } from 'expo-linear-gradient';
+import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -21,19 +24,8 @@ export default function Index() {
     "List things ^^ (colors, sea creatures, favorite foods)"
   ];
 
-  // Initialize immediately instead of waiting for useEffect
-  const [shuffledPhrases, setShuffledPhrases] = useState(() => {
-    const shuffled = [...basePhrases];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  });
-  
-  const [currentIndex, setCurrentIndex] = useState(() => 
-    Math.floor(Math.random() * basePhrases.length)
-  );
+  const [shuffledPhrases, setShuffledPhrases] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Shuffle array function
   const shuffleArray = (array) => {
@@ -44,6 +36,13 @@ export default function Index() {
     }
     return shuffled;
   };
+
+  // Initialize with shuffled phrases and random start
+  useEffect(() => {
+    const shuffled = shuffleArray(basePhrases);
+    setShuffledPhrases(shuffled);
+    setCurrentIndex(Math.floor(Math.random() * shuffled.length));
+  }, []);
 
   const nextPhrase = () => {
     setCurrentIndex((prevIndex) => {
@@ -59,118 +58,96 @@ export default function Index() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #B85450, #008B8B, #CD853F)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '20px',
-        margin: 0,
-        fontFamily: 'system-ui, -apple-system, sans-serif'
-      }}
-    >
-      {/* Custom header */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '60px',
-        backgroundColor: '#008B8B',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottom: '2px solid rgba(255, 255, 255, 0.3)',
-      }}>
-        <h1 style={{
-          color: 'white',
-          fontSize: '20px',
-          fontWeight: 'bold',
-          letterSpacing: '1px',
-          margin: 0,
-        }}>
-          DBTime
-        </h1>
-      </div>
-
-      {/* Content container with top margin */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: '60px',
-        textAlign: 'center',
-        maxWidth: '600px',
-        width: '100%',
-      }}>
-
-        <h2 style={{
-          fontSize: '32px',
-          fontWeight: 'bold',
-          textAlign: 'center',
-          marginBottom: '30px',
-          color: 'white',
-          textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)',
-          lineHeight: '1.2',
-        }}>
-          Your Breath<br />Your Power
-        </h2>
-
-        {/* Emoji instead of image */}
-        <div style={{
-          fontSize: '80px',
-          marginBottom: '20px',
-          textAlign: 'center',
-        }}>
-          🐕‍🦺
-        </div>
-        
-        <p style={{
-          fontSize: '18px',
-          textAlign: 'center',
-          marginBottom: '30px',
-          padding: '20px',
-          color: 'white',
-          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          borderRadius: '10px',
-          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)',
-          lineHeight: '1.4',
-          margin: '0 0 30px 0',
-        }}>
-          {shuffledPhrases[currentIndex] || "Loading..."}
-        </p>
-
-        <button
-          onClick={nextPhrase}
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            color: 'white',
-            fontSize: '16px',
+    <>
+      <Stack.Screen 
+        options={{ 
+          title: "DBTime",
+          headerStyle: {
+            backgroundColor: '#008B8B', // Teal from your gradient
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
             fontWeight: 'bold',
-            padding: '15px 30px',
-            borderRadius: '25px',
-            border: '2px solid white',
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
-            transition: 'all 0.3s ease',
+            fontSize: 20,
+            letterSpacing: 1,
+          },
+        }} 
+      />
+      <LinearGradient
+        colors={['#B85450', '#008B8B', '#CD853F']} // Rust, Teal, Sandy Brown
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 20,
+        }}
+      >
+        <Text style={{
+          fontSize: 32,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 30,
+          color: "white",
+          textShadowColor: 'rgba(0, 0, 0, 0.3)',
+          textShadowOffset: {width: 1, height: 1},
+          textShadowRadius: 3,
+        }}>
+          Your Breath{"\n"}Your Power
+        </Text>
+
+        <Image 
+          source={require("@/assets/images/dogbird.jpg")} 
+          style={{
+            width: 200,
+            height: 200,
+            marginBottom: 20,
           }}
-          onMouseOver={(e) => {
-            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-            e.target.style.transform = 'translateY(-2px)';
-          }}
-          onMouseOut={(e) => {
-            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-            e.target.style.transform = 'translateY(0)';
+          resizeMode="contain"
+        />
+        
+        <Text style={{
+          fontSize: 18,
+          textAlign: "center",
+          marginBottom: 30,
+          paddingHorizontal: 20,
+          color: "white",
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          padding: 15,
+          borderRadius: 10,
+          textShadowColor: 'rgba(0, 0, 0, 0.3)',
+          textShadowOffset: {width: 1, height: 1},
+          textShadowRadius: 2,
+        }}>
+          {shuffledPhrases.length > 0 ? shuffledPhrases[currentIndex] : "Loading..."}
+        </Text>
+
+        <TouchableOpacity
+          onPress={nextPhrase}
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            paddingHorizontal: 30,
+            paddingVertical: 15,
+            borderRadius: 25,
+            borderWidth: 2,
+            borderColor: "white",
+            shadowColor: "#000",
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
           }}
         >
-          Next Resource
-        </button>
-        
-      </div>
-    </div>
+          <Text style={{
+            color: "white",
+            fontSize: 16,
+            fontWeight: "bold",
+          }}>
+            Next Resource
+          </Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </>
   );
 }
