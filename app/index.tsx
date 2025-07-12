@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, Platform, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -26,7 +26,6 @@ export default function Index() {
 
   const [shuffledPhrases, setShuffledPhrases] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [imageError, setImageError] = useState(false);
 
   // Shuffle array function
   const shuffleArray = (array) => {
@@ -63,15 +62,7 @@ export default function Index() {
       <Stack.Screen 
         options={{ 
           title: "DBTime",
-          headerStyle: {
-            backgroundColor: Platform.OS === 'web' ? '#008B8B' : '#008B8B',
-          },
-          headerTintColor: 'white',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 20,
-            letterSpacing: 1,
-          },
+          headerShown: false, // Hide default header for web
         }} 
       />
       <LinearGradient
@@ -85,6 +76,28 @@ export default function Index() {
           padding: 20,
         }}
       >
+        {/* Custom header */}
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 80,
+          backgroundColor: '#008B8B',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: 20,
+        }}>
+          <Text style={{
+            color: 'white',
+            fontSize: 20,
+            fontWeight: 'bold',
+            letterSpacing: 1,
+          }}>
+            DBTime
+          </Text>
+        </View>
+
         <Text style={{
           fontSize: 32,
           fontWeight: "bold",
@@ -98,30 +111,14 @@ export default function Index() {
           Your Breath{"\n"}Your Power
         </Text>
 
-        {/* Conditional image rendering with error handling */}
-        {!imageError && (
-          <Image 
-            source={require("@/assets/images/dogbird.jpg")} 
-            style={{
-              width: 200,
-              height: 200,
-              marginBottom: 20,
-            }}
-            resizeMode="contain"
-            onError={() => setImageError(true)}
-          />
-        )}
-        
-        {/* Fallback if image fails */}
-        {imageError && (
-          <Text style={{
-            fontSize: 60,
-            marginBottom: 20,
-            textAlign: "center",
-          }}>
-            🐕‍🦺
-          </Text>
-        )}
+        {/* Emoji instead of image */}
+        <Text style={{
+          fontSize: 80,
+          marginBottom: 20,
+          textAlign: "center",
+        }}>
+          🐕‍🦺
+        </Text>
         
         <Text style={{
           fontSize: 18,
