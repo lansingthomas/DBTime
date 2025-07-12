@@ -1,0 +1,24 @@
+{
+  "name": "DBTime",
+  "short_name": "DBTime",
+  "description": "DBTime - Dialectical behavior resources app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "./assets/images/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/images/adaptive-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
