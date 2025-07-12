@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { Platform, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 
 export default function Index() {
   const basePhrases = [
@@ -40,11 +40,12 @@ export default function Index() {
 
   const nextPhrase = () => {
     setCurrentIndex((prevIndex) => {
-      const nextIndex = (prevIndex + 1) % shuffledPhrases.length;
+      const nextIndex = (prevIndex + 1) % basePhrases.length;
       
       // When we've gone through all phrases, reshuffle for next round
       if (nextIndex === 0) {
-        setShuffledPhrases(shuffleArray(basePhrases));
+        const newShuffled = shuffleArray(basePhrases);
+        setShuffledPhrases(newShuffled);
       }
       
       return nextIndex;
@@ -56,7 +57,7 @@ export default function Index() {
       <Stack.Screen 
         options={{ 
           title: "DBTime",
-          headerShown: Platform.OS !== 'web', // Hide header on web
+          headerShown: false, // Always hide header
           headerStyle: {
             backgroundColor: '#008B8B', // Teal from your gradient
           },
