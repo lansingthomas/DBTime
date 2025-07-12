@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
@@ -24,8 +24,19 @@ export default function Index() {
     "List things ^^ (colors, sea creatures, favorite foods)"
   ];
 
-  const [shuffledPhrases, setShuffledPhrases] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Initialize immediately instead of waiting for useEffect
+  const [shuffledPhrases, setShuffledPhrases] = useState(() => {
+    const shuffled = [...basePhrases];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  });
+  
+  const [currentIndex, setCurrentIndex] = useState(() => 
+    Math.floor(Math.random() * basePhrases.length)
+  );
 
   // Shuffle array function
   const shuffleArray = (array) => {
@@ -36,13 +47,6 @@ export default function Index() {
     }
     return shuffled;
   };
-
-  // Initialize with shuffled phrases and random start
-  useEffect(() => {
-    const shuffled = shuffleArray(basePhrases);
-    setShuffledPhrases(shuffled);
-    setCurrentIndex(Math.floor(Math.random() * shuffled.length));
-  }, []);
 
   const nextPhrase = () => {
     setCurrentIndex((prevIndex) => {
@@ -82,11 +86,13 @@ export default function Index() {
           top: 0,
           left: 0,
           right: 0,
-          height: 80,
+          height: 60,
           backgroundColor: '#008B8B',
           justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: 20,
+          zIndex: 1000,
+          borderBottomWidth: 2,
+          borderBottomColor: 'rgba(255, 255, 255, 0.3)',
         }}>
           <Text style={{
             color: 'white',
@@ -97,6 +103,14 @@ export default function Index() {
             DBTime
           </Text>
         </View>
+
+        {/* Content container with top margin */}
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 60,
+        }}>
 
         <Text style={{
           fontSize: 32,
@@ -133,7 +147,7 @@ export default function Index() {
           textShadowOffset: {width: 1, height: 1},
           textShadowRadius: 2,
         }}>
-          {shuffledPhrases.length > 0 ? shuffledPhrases[currentIndex] : "Loading..."}
+          {shuffledPhrases[currentIndex] || "Loading..."}
         </Text>
 
         <TouchableOpacity
@@ -160,6 +174,8 @@ export default function Index() {
             Next Resource
           </Text>
         </TouchableOpacity>
+        
+        </View>
       </LinearGradient>
     </>
   );
