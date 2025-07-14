@@ -34,22 +34,30 @@ export default function Index() {
     return shuffled;
   };
 
-  // Initialize with shuffled phrases immediately
-  const [shuffledPhrases, setShuffledPhrases] = useState(() => shuffleArray(basePhrases));
+  // Start with empty states - will be populated client-side only
+  const [shuffledPhrases, setShuffledPhrases] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-  // Ensure client-side rendering
+  // Ensure client-side rendering with multiple checks
   useEffect(() => {
-    setIsClient(true);
-    // Re-shuffle and randomize on client mount
-    const shuffled = shuffleArray(basePhrases);
-    setShuffledPhrases(shuffled);
-    setCurrentIndex(Math.floor(Math.random() * shuffled.length));
+    // Only run in browser
+    if (typeof window !== 'undefined') {
+      setIsClient(true);
+      
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const shuffled = shuffleArray(basePhrases);
+        setShuffledPhrases(shuffled);
+        setCurrentIndex(Math.floor(Math.random() * shuffled.length));
+        setIsReady(true);
+      }, 100);
+    }
   }, []);
 
   const nextPhrase = () => {
-    if (!isClient) return; // Prevent server-side execution
+    if (!isClient || !isReady) return;
     
     const nextIndex = (currentIndex + 1) % shuffledPhrases.length;
     
@@ -61,6 +69,20 @@ export default function Index() {
     
     setCurrentIndex(nextIndex);
   };
+
+  // Show loading until client-side is ready
+  if (!isClient || !isReady || shuffledPhrases.length === 0) {
+    return (
+      <View style={{ 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: '#008B8B' 
+      }}>
+        <Text style={{ color: 'white', fontSize: 18 }}>Loading...</Text>
+      </View>
+    );
+  }
 
   const MainContent = () => (
     <LinearGradient
@@ -108,7 +130,6 @@ export default function Index() {
       <TouchableOpacity
         onPress={nextPhrase}
         activeOpacity={0.8}
-        disabled={!isClient}
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.2)",
           paddingHorizontal: 30,
@@ -122,7 +143,6 @@ export default function Index() {
           shadowRadius: 3.84,
           elevation: 5,
           cursor: Platform.OS === 'web' ? 'pointer' : 'default',
-          opacity: isClient ? 1 : 0.7,
         }}
       >
         <Text style={{
