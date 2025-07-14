@@ -35,7 +35,7 @@ jobs:
       run: npm ci
     
     - name: Build for web
-      run: npx expo export --platform web
+      run: npx expo export:web --no-minify --no-bytecode
     
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -48,6 +48,3 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
-
-      - name: Export for web
-        run: npx expo export:web --no-minify --no-bytecode
