@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
@@ -37,8 +37,20 @@ export default function Index() {
   // Initialize with shuffled phrases immediately
   const [shuffledPhrases, setShuffledPhrases] = useState(() => shuffleArray(basePhrases));
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+    // Re-shuffle and randomize on client mount
+    const shuffled = shuffleArray(basePhrases);
+    setShuffledPhrases(shuffled);
+    setCurrentIndex(Math.floor(Math.random() * shuffled.length));
+  }, []);
 
   const nextPhrase = () => {
+    if (!isClient) return; // Prevent server-side execution
+    
     const nextIndex = (currentIndex + 1) % shuffledPhrases.length;
     
     // When we've gone through all phrases, reshuffle for next round
@@ -96,6 +108,7 @@ export default function Index() {
       <TouchableOpacity
         onPress={nextPhrase}
         activeOpacity={0.8}
+        disabled={!isClient}
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.2)",
           paddingHorizontal: 30,
@@ -109,6 +122,7 @@ export default function Index() {
           shadowRadius: 3.84,
           elevation: 5,
           cursor: Platform.OS === 'web' ? 'pointer' : 'default',
+          opacity: isClient ? 1 : 0.7,
         }}
       >
         <Text style={{
